@@ -17,7 +17,29 @@ impl Ticket {
     // as well as some `String` methods. Use the documentation of Rust's standard library
     // to find the most appropriate options -> https://doc.rust-lang.org/std/string/struct.String.html
     fn new(title: String, description: String, status: String) -> Self {
-        todo!();
+        if title.is_empty() {
+            panic!("Title cannot be empty");
+        }
+        let title_size: usize = title.as_bytes().into_iter().map(|_| 1).sum();
+        if  title_size > 50 {
+            panic!("Title cannot be longer than 50 characters");
+        }
+
+        // there's a canonical way to get the size of a string, in terms of bytes.
+        let description_size = description.len();
+        if description_size == 0 {
+            panic!("Description cannot be empty");
+        }
+        if description_size > 500 {
+            panic!("Description cannot be longer than 500 characters");
+        }
+
+        let allowed_status = ["To-Do", "In Progress", "Done"];
+        let status_legal: bool = allowed_status.iter().any(|&s| s == status);
+        if !status_legal {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+
         Self {
             title,
             description,
