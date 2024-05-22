@@ -13,7 +13,10 @@ mod tests {
 
     #[test]
     fn string_size() {
-        assert_eq!(size_of::<String>(), todo!());
+        let ptr_size = std::mem::size_of::<u64>();
+        let length_size = std::mem::size_of::<u64>();
+        let capacity_size = std::mem::size_of::<u64>();
+        assert_eq!(size_of::<String>(), ptr_size + length_size + capacity_size);
     }
 
     #[test]
@@ -23,6 +26,7 @@ mod tests {
         // but, in general, the memory layout of structs is a more complex topic.
         // If you're curious, check out the "Data layout" section of the Rustonomicon
         // https://doc.rust-lang.org/nomicon/data.html for more information.
-        assert_eq!(size_of::<Ticket>(), todo!());
+        let string_size = std::mem::size_of::<String>();
+        assert_eq!(size_of::<Ticket>(), string_size*3);
     }
 }
