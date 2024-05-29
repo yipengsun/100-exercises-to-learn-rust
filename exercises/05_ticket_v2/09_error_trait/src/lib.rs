@@ -3,9 +3,41 @@
 //  The docs for the `std::fmt` module are a good place to start and look for examples:
 //  https://doc.rust-lang.org/std/fmt/index.html#write
 
+use std::fmt::{Debug, Display, Error, Formatter};
+
 enum TicketNewError {
     TitleError(String),
     DescriptionError(String),
+}
+
+impl std::error::Error for TicketNewError {}
+
+impl Debug for TicketNewError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        let err_subname: &str;
+        let err_msg: &str;
+        match &self {
+            TicketNewError::TitleError(s) => {
+                err_subname = "TitleError";
+                err_msg = s;
+            }
+            TicketNewError::DescriptionError(s) => {
+                err_subname = "DescriptionError";
+                err_msg = s;
+            }
+        }
+
+        write!(f, "TicketNewError: {}, {}", err_subname, err_msg)
+    }
+}
+
+impl Display for TicketNewError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        match &self {
+            TicketNewError::TitleError(s) | TicketNewError::DescriptionError(s)
+            => write!(f, "{}", s)
+        }
+    }
 }
 
 // TODO: `easy_ticket` should panic when the title is invalid, using the error message
@@ -13,7 +45,13 @@ enum TicketNewError {
 //   When the description is invalid, instead, it should use a default description:
 //   "No description provided".
 fn easy_ticket(title: String, description: String, status: Status) -> Ticket {
-    todo!()
+    match Ticket::new(title.clone(), description, status.clone()) {
+        Ok(t) => t,
+        Err(e) => match e {
+            TicketNewError::TitleError(_) => panic!("{e}"),
+            _ => Ticket::new(title, "Description not provided".into(), status).unwrap(),
+        } 
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
