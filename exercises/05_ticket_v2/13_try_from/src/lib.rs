@@ -1,11 +1,39 @@
 // TODO: Implement `TryFrom<String>` and `TryFrom<&str>` for `Status`.
 //  The parsing should be case-insensitive.
 
+use std::fmt::Error;
+
 #[derive(Debug, PartialEq, Clone)]
 enum Status {
     ToDo,
     InProgress,
     Done,
+}
+
+impl TryFrom<String> for Status {
+    type Error = u8;
+
+    fn try_from(val: String) -> Result<Self, Self::Error> {
+        match val.to_lowercase().as_str() {
+            "todo" => Ok(Status::ToDo),
+            "inprogress" => Ok(Status::InProgress),
+            "done" => Ok(Status::Done),
+            _ => Err(1u8),
+        }
+    }
+}
+
+impl TryFrom<&str> for Status {
+    type Error = u8;
+
+    fn try_from(val: &str) -> Result<Self, Self::Error> {
+        match val.to_lowercase().as_str() {
+            "todo" => Ok(Status::ToDo),
+            "inprogress" => Ok(Status::InProgress),
+            "done" => Ok(Status::Done),
+            _ => Err(1u8),
+        }
+    }
 }
 
 #[cfg(test)]
