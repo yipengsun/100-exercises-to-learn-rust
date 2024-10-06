@@ -11,13 +11,13 @@ mod ticket {
                 panic!("Title cannot be empty");
             }
             if title.len() > 50 {
-                panic!("Title cannot be longer than 50 characters");
+                panic!("Title cannot be longer than 50 bytes");
             }
             if description.is_empty() {
                 panic!("Description cannot be empty");
             }
             if description.len() > 500 {
-                panic!("Description cannot be longer than 500 characters");
+                panic!("Description cannot be longer than 500 bytes");
             }
             if status != "To-Do" && status != "In Progress" && status != "Done" {
                 panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
@@ -48,7 +48,7 @@ mod tests {
 
         // You should be seeing this error when trying to run this exercise:
         //
-        // error[E0616]: field `description` of struct `encapsulation::ticket::Ticket` is private
+        // error[E0616]: field `description` of struct `Ticket` is private
         //    |
         //    |              assert_eq!(ticket.description, "A description");
         //    |                         ^^^^^^^^^^^^^^^^^^

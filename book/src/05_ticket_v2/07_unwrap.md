@@ -1,11 +1,11 @@
 # Unwrapping
 
-`Ticket::new` now returns a `Result` instead of panicking on invalid inputs.  
+`Ticket::new` now returns a `Result` instead of panicking on invalid inputs.\
 What does this mean for the caller?
 
 ## Failures can't be (implicitly) ignored
 
-Unlike exceptions, Rust's `Result` forces you to **handle errors at the call site**.  
+Unlike exceptions, Rust's `Result` forces you to **handle errors at the call site**.\
 If you call a function that returns a `Result`, Rust won't allow you to implicitly ignore the error case.
 
 ```rust
@@ -14,8 +14,8 @@ fn parse_int(s: &str) -> Result<i32, ParseIntError> {
 }
 
 // This won't compile: we're not handling the error case.
-// We must either use `match` or one of the combinators provided by `Result`
-// to "unwrap" the success value or handle the error.
+// We must either use `match` or one of the combinators provided by 
+// `Result` to "unwrap" the success value or handle the error.
 let number = parse_int("42") + 2;
 ```
 
@@ -30,7 +30,7 @@ When you call a function that returns a `Result`, you have two key options:
   let number = parse_int("42").unwrap();
   // `expect` lets you specify a custom panic message.
   let number = parse_int("42").expect("Failed to parse integer");
-  ``` 
+  ```
 - Destructure the `Result` using a `match` expression to deal with the error case explicitly.
   ```rust
   match parse_int("42") {
@@ -38,7 +38,3 @@ When you call a function that returns a `Result`, you have two key options:
       Err(err) => eprintln!("Error: {}", err),
   }
   ```
-
-## References
-
-- The exercise for this section is located in `exercises/05_ticket_v2/07_unwrap` 

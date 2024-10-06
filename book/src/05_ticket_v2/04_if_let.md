@@ -8,21 +8,24 @@ impl Ticket {
         match &self.status {
             Status::InProgress { assigned_to } => assigned_to,
             Status::Done | Status::ToDo => {
-                panic!("Only `In-Progress` tickets can be assigned to someone"),
+                panic!(
+                    "Only `In-Progress` tickets can be \
+                    assigned to someone"
+                )
             }
         }
     }
 }
 ```
 
-You only care about the `Status::InProgress` variant. 
+You only care about the `Status::InProgress` variant.
 Do you really need to match on all the other variants?
 
 New constructs to the rescue!
 
 ## `if let`
 
-The `if let` construct allows you to match on a single variant of an enum, 
+The `if let` construct allows you to match on a single variant of an enum,
 without having to handle all the other variants.
 
 Here's how you can use `if let` to simplify the `assigned_to` method:
@@ -33,7 +36,9 @@ impl Ticket {
         if let Status::InProgress { assigned_to } = &self.status {
             assigned_to
         } else {
-            panic!("Only `In-Progress` tickets can be assigned to someone");
+            panic!(
+                "Only `In-Progress` tickets can be assigned to someone"
+            );
         }
     }
 }
@@ -48,7 +53,9 @@ you can use the `let/else` construct:
 impl Ticket {
     pub fn assigned_to(&self) -> &str {
         let Status::InProgress { assigned_to } = &self.status else {
-            panic!("Only `In-Progress` tickets can be assigned to someone");
+            panic!(
+                "Only `In-Progress` tickets can be assigned to someone"
+            );
         };
         assigned_to
     }
@@ -61,10 +68,6 @@ as the code that precedes it.
 
 ## Style
 
-Both `if let` and `let/else` are idiomatic Rust constructs.  
-Use them as you see fit to improve the readability of your code, 
+Both `if let` and `let/else` are idiomatic Rust constructs.\
+Use them as you see fit to improve the readability of your code,
 but don't overdo it: `match` is always there when you need it.
-
-## References
-
-- The exercise for this section is located in `exercises/05_ticket_v2/04_if_let`
